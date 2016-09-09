@@ -1,0 +1,1 @@
+docker run --rm --name jupyterhub -p 127.0.0.1:8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v `pwd`/config:/config medbook/jupyterhub jupyterhub --no-ssl --debug -f /config/jupyterhub_config.py
