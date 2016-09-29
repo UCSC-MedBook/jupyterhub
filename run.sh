@@ -1,1 +1,2 @@
-docker run --rm --name jupyterhub -p 127.0.0.1:8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v `pwd`/config:/config medbook/jupyterhub jupyterhub --no-ssl --debug -f /config/jupyterhub_config.py
+source ~/.env
+docker run -it --rm --name jupyterhub -p 0.0.0.0:443:443 -v /var/run/docker.sock:/var/run/docker.sock -v `pwd`/config:/config -v /etc/letsencrypt/archive/medbook.zoomdaisy.com:/cert -e "GITHUB_OAUTH_ID=$GITHUB_OAUTH_ID" -e "GITHUB_OAUTH_SECRET=$GITHUB_OAUTH_SECRET" -e "GITHUB_OAUTH_CALLBACK=$GITHUB_OAUTH_CALLBACK"   medbook/jupyterhub jupyterhub --debug -f /config/jupyterhub_config.py

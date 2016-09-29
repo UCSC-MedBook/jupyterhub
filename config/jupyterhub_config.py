@@ -1,3 +1,5 @@
+import os
+
 # Configuration file for jupyterhub.
 
 #------------------------------------------------------------------------------
@@ -77,7 +79,17 @@
 # - takes two arguments: (handler, data),
 #   where `handler` is the calling web.RequestHandler,
 #   and `data` is the POST form data from the login page.
-# c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
+
+#TODO put these into env variabes, src them in runscript
+c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
+c.GitHubOAuthenticator.client_id = os.environ["GITHUB_OAUTH_ID"]
+c.GitHubOAuthenticator.client_secret = os.environ["GITHUB_OAUTH_SECRET"]
+c.GitHubOAuthenticator.oauth_callback_url = os.environ["GITHUB_OAUTH_CALLBACK"]
+
+c.Authenticator.whitelist = whitelist = set()
+c.Authenticator.admin_users = admin_whitelist = set()
+whitelist.add("rissem")
+admin_whitelist.add("rissem")
 
 # The base URL of the entire application
 # c.JupyterHub.base_url = '/'
@@ -183,7 +195,7 @@
 # c.JupyterHub.pid_file = ''
 
 # The public facing port of the proxy
-# c.JupyterHub.port = 8000
+c.JupyterHub.port = 443
 
 # The ip for the proxy API handlers
 # c.JupyterHub.proxy_api_ip = '127.0.0.1'
@@ -237,8 +249,10 @@
 # 
 # Should be a subclass of Spawner.
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
+c.DockerSpawner.use_internal_ip = True
 
-#taken from https://github.com/jupyterhub/dockerspawner/blob/master/examples/oauth/jupyterhub_config.py#L8
+
+# taken from https://github.com/jupyterhub/dockerspawner/blob/master/examples/oauth/jupyterhub_config.py#L8
 from jupyter_client.localinterfaces import public_ips
 c.JupyterHub.hub_ip = public_ips()[0]
 
@@ -247,12 +261,12 @@ c.JupyterHub.hub_ip = public_ips()[0]
 # Path to SSL certificate file for the public facing interface of the proxy
 # 
 # Use with ssl_key
-# c.JupyterHub.ssl_cert = ''
+c.JupyterHub.ssl_cert = '/cert/fullchain1.pem'
 
 # Path to SSL key file for the public facing interface of the proxy
 # 
 # Use with ssl_cert
-# c.JupyterHub.ssl_key = ''
+c.JupyterHub.ssl_key = '/cert/privkey1.pem'
 
 # Host to send statds metrics to
 # c.JupyterHub.statsd_host = ''
