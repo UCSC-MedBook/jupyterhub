@@ -89,6 +89,7 @@ c.GitHubOAuthenticator.oauth_callback_url = os.environ["GITHUB_OAUTH_CALLBACK"]
 c.Authenticator.whitelist = whitelist = set()
 c.Authenticator.admin_users = admin_whitelist = set()
 whitelist.add("rissem")
+whitelist.add("rcurrie")
 admin_whitelist.add("rissem")
 
 # The base URL of the entire application
