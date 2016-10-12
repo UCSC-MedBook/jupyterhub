@@ -262,12 +262,12 @@ c.JupyterHub.hub_ip = public_ips()[0]
 # Path to SSL certificate file for the public facing interface of the proxy
 # 
 # Use with ssl_key
-c.JupyterHub.ssl_cert = '/cert/fullchain1.pem'
+c.JupyterHub.ssl_cert = '/cert/cert'
 
 # Path to SSL key file for the public facing interface of the proxy
 # 
 # Use with ssl_cert
-c.JupyterHub.ssl_key = '/cert/privkey1.pem'
+c.JupyterHub.ssl_key = '/cert/key'
 
 # Host to send statds metrics to
 # c.JupyterHub.statsd_host = ''
