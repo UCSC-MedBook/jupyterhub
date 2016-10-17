@@ -2,4 +2,4 @@
 
 set -x -e
 
-jupyterhub --debug -f /config/jupyterhub_config.py
+jupyterhub --debug --no-ssl -f /config/jupyterhub_config.py

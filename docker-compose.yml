@@ -1,0 +1,28 @@
+version: '2'
+services:
+  jupyterhub:
+    container_name: "jupyterhub"
+    image: medbook/jupyterhub
+#    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config:/config
+    environment:
+      DOCKER_NETWORK_NAME:
+      GITHUB_OAUTH_ID:
+      GITHUB_OAUTH_SECRET:
+      GITHUB_OAUTH_CALLBACK:
+      VIRTUAL_HOST: "${JUPYTER_HOSTNAME}"
+      VIRTUAL_PORT: 8000
+    command: /scripts/runJupyterhub.sh
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+      
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /etc/letsencrypt/archive/medbook.zoomdaisy.com:/etc/nginx/certs      

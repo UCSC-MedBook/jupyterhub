@@ -196,7 +196,7 @@ admin_whitelist.add("rissem")
 # c.JupyterHub.pid_file = ''
 
 # The public facing port of the proxy
-c.JupyterHub.port = 443
+c.JupyterHub.port = 8000
 
 # The ip for the proxy API handlers
 # c.JupyterHub.proxy_api_ip = '127.0.0.1'
@@ -251,7 +251,9 @@ c.JupyterHub.port = 443
 # Should be a subclass of Spawner.
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 c.DockerSpawner.use_internal_ip = True
-
+network_name = os.environ["DOCKER_NETWORK_NAME"]
+c.DockerSpawner.network_name = network_name
+c.DockerSpawner.extra_host_config = { 'network_mode': network_name }
 
 # taken from https://github.com/jupyterhub/dockerspawner/blob/master/examples/oauth/jupyterhub_config.py#L8
 from jupyter_client.localinterfaces import public_ips
@@ -262,12 +264,12 @@ c.JupyterHub.hub_ip = public_ips()[0]
 # Path to SSL certificate file for the public facing interface of the proxy
 # 
 # Use with ssl_key
-c.JupyterHub.ssl_cert = '/cert/cert'
+# c.JupyterHub.ssl_cert = '/cert/cert'
 
 # Path to SSL key file for the public facing interface of the proxy
 # 
 # Use with ssl_cert
-c.JupyterHub.ssl_key = '/cert/key'
+# c.JupyterHub.ssl_key = '/cert/key'
 
 # Host to send statds metrics to
 # c.JupyterHub.statsd_host = ''
