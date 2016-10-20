@@ -16,6 +16,17 @@ services:
       VIRTUAL_PORT: 8000
     command: /scripts/runJupyterhub.sh
 
+  nbviewer:
+    container_name: "nbviewer"
+    image: jupyter/nbviewer
+    environment:
+      DOCKER_NETWORK_NAME:
+      VIRTUAL_HOST: "${NBVIEWER_HOSTNAME}"
+      VIRTUAL_PORT: 8080
+    volumes:
+      - /data/public:/notebooks
+    command: python3 -m nbviewer --port=8080 --localfiles="/notebooks"
+
   nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
