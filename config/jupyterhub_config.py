@@ -253,7 +253,7 @@ c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 c.DockerSpawner.use_internal_ip = True
 network_name = os.environ["DOCKER_NETWORK_NAME"]
 c.DockerSpawner.network_name = network_name
-c.DockerSpawner.extra_host_config = { 'network_mode': network_name }
+c.DockerSpawner.extra_host_config = { 'network_mode': network_name, "extra_hosts": {"mongo": "13.93.223.224" }}
 
 # taken from https://github.com/jupyterhub/dockerspawner/blob/master/examples/oauth/jupyterhub_config.py#L8
 from jupyter_client.localinterfaces import public_ips
