@@ -90,6 +90,13 @@ c.Authenticator.whitelist = whitelist = set()
 c.Authenticator.admin_users = admin_whitelist = set()
 whitelist.add("rissem")
 whitelist.add("rcurrie")
+whitelist.add("hbeale")
+whitelist.add("linhvoyo")
+whitelist.add("e-t-k")
+whitelist.add("mokolodi1")
+whitelist.add("tedgoldstein")
+whitelist.add("omorozova")
+
 admin_whitelist.add("rissem")
 
 # The base URL of the entire application
