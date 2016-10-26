@@ -96,8 +96,13 @@ whitelist.add("e-t-k")
 whitelist.add("mokolodi1")
 whitelist.add("tedgoldstein")
 whitelist.add("omorozova")
+whitelist.add("meesavag")
+whitelist.add("dcolligan")
 
 admin_whitelist.add("rissem")
+admin_whitelist.add("e-t-k")
+admin_whitelist.add("mokolodi1")
+admin_whitelist.add("rcurrie")
 
 # The base URL of the entire application
 # c.JupyterHub.base_url = '/'
