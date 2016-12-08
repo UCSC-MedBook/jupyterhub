@@ -98,6 +98,7 @@ whitelist.add("tedgoldstein")
 whitelist.add("omorozova")
 whitelist.add("meesavag")
 whitelist.add("dcolligan")
+whitelist.add("acthp")
 
 admin_whitelist.add("rissem")
 admin_whitelist.add("e-t-k")
