@@ -1,43 +1,63 @@
-version: '2'
+version: '3'
 services:
-  jupyterhub:
+  jupyter:
+    build:
+      context : .
+      dockerfile: Dockerfile
     container_name: "jupyterhub"
     image: medbook/jupyterhub
 #    restart: always
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:rw
       - ./config:/config
+      - "data:${DATA_VOLUME_CONTAINER}"
     environment:
-      DOCKER_NETWORK_NAME:
-      GITHUB_OAUTH_ID:
-      GITHUB_OAUTH_SECRET:
-      GITHUB_OAUTH_CALLBACK:
-      VIRTUAL_HOST: "${JUPYTER_HOSTNAME}"
-      VIRTUAL_PORT: 8000
-      CONFIGPROXY_AUTH_TOKEN:
-    command: /scripts/runJupyterhub.sh
+      # All containers will join this network
+      DOCKER_NETWORK_NAME: ${DOCKER_NETWORK_NAME}
+      # JupyterHub will spawn this Notebook image for users
+      DOCKER_NOTEBOOK_IMAGE: ${DOCKER_NOTEBOOK_IMAGE}
+      # Notebook directory inside user image
+      DOCKER_NOTEBOOK_DIR: ${DOCKER_NOTEBOOK_DIR}
+      # Using this run command (optional)
+      DOCKER_SPAWN_CMD: ${DOCKER_SPAWN_CMD}
+      # Required to authenticate users using GitHub OAuth
+    command: jupyterhub -f /config/jupyterhub_config.py
     extra_hosts:
-      mongo: 13.93.223.224
+      mongo: ${MONGO_HOST}
 
+  proxy:
+    image: quay.io/ucsc_cgl/dcc-auth-proxy
+    environment:
+      GOOGLE_CLIENT_ID:
+      GOOGLE_CLIENT_SECRET:
+      SESSION_SECRET:
+      HOST: "proxy.zoomdaisy.com"
+      COOKIE_DOMAIN: "zoomdaisy.com"
+      PORT: 443
+      SERVICE_JUPYTER_PORT: 8000
+      SERVICE_NBVIEWER_PORT: 8080
+      NODE_ENV: production
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - '.cert:/app/cert'
+      - './accessControl.json:/app/accessControl.json'
+    restart: always
 
   nbviewer:
     container_name: "nbviewer"
     image: jupyter/nbviewer
-    environment:
-      DOCKER_NETWORK_NAME:
-      VIRTUAL_HOST: "${NBVIEWER_HOSTNAME}"
-      VIRTUAL_PORT: 8080
     volumes:
       - /data/public:/notebooks
     command: python3 -m nbviewer --port=8080 --localfiles="/notebooks"
 
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
-      
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ${CERT_DIR}:/etc/nginx/certs
+volumes:
+  data:
+    external:
+      name: ${DATA_VOLUME_HOST}
+
+networks:
+  default:
+    external:
+      name: ${DOCKER_NETWORK_NAME}
