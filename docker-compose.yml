@@ -36,6 +36,7 @@ services:
       PORT: 443
       SERVICE_JUPYTER_PORT: 8000
       SERVICE_NBVIEWER_PORT: 8080
+      SERVICE_PHPLDAPADMIN_PORT: 80
       NODE_ENV: production
     ports:
       - "443:443"
@@ -44,6 +45,15 @@ services:
       - '.cert:/app/cert'
       - './accessControl.json:/app/accessControl.json'
     restart: always
+
+  ldap:
+    image: osixia/openldap:1.1.8
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:0.6.12
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: ldap
+      PHPLDAPADMIN_HTTPS: "false"
 
   nbviewer:
     container_name: "nbviewer"
