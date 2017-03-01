@@ -26,7 +26,7 @@ services:
       mongo: ${MONGO_HOST}
 
   proxy:
-    image: quay.io/ucsc_cgl/dcc-auth-proxy
+    image: unfairbanks/dcc-auth-proxy:0.1 # from https://github.com/bd2KGenomics/dcc-auth-proxy
     environment:
       GOOGLE_CLIENT_ID:
       GOOGLE_CLIENT_SECRET:
